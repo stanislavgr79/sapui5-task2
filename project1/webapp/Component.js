@@ -16,6 +16,9 @@ sap.ui.define([
             // call the base component's init function
             UIComponent.prototype.init.apply(this, arguments);
 
+            // initialize books model using lifecycle event
+            this.setModel(models.createBooksModel(), "books");
+
             // set the device model
             this.setModel(models.createDeviceModel(), "device");
 

@@ -2,5 +2,87 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
+        <content>
+            <Panel accessibleRole="Region">
+                <Table id="booksTable"
+                    class="sapUiResponsiveMargin"
+                    width="auto"
+                    items="{
+                        path: 'books>/books',
+                        sorter: {
+                            path: 'ID'
+                        }
+                    }">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <content>
+                            <Title text="Books Library" level="H2"/>
+                            <ToolbarSpacer/>
+                            <Label text="Total Books:"/>
+                            <Text text="{books>/books/length}"/>
+                        </content>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <infoToolbar>
+                    <OverflowToolbar>
+                        <Label text="Available books in the library"/>
+                    </OverflowToolbar>
+                </infoToolbar>
+                <columns>
+                    <Column width="4em">
+                        <Text text="ID"/>
+                    </Column>
+                    <Column
+                        width="25em"
+                        minScreenWidth="Tablet"
+                        demandPopin="true">
+                        <Text text="Name"/>
+                    </Column>
+                    <Column
+                        width="12em"
+                        minScreenWidth="Tablet"
+                        demandPopin="true">
+                        <Text text="Author"/>
+                    </Column>
+                    <Column
+                        minScreenWidth="Desktop"
+                        demandPopin="true"
+                        hAlign="Center">
+                        <Text text="Genre"/>
+                    </Column>
+                    <Column
+                        minScreenWidth="Desktop"
+                        demandPopin="true"
+                        hAlign="Center">
+                        <Text text="Release Date"/>
+                    </Column>
+                    <Column
+                        hAlign="End">
+                        <Text text="Available"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem vAlign="Middle">
+                        <cells>
+                            <ObjectIdentifier title="{books>ID}"/>
+                            <Text text="{books>Name}"/>
+                            <Text text="{books>Author}"/>
+                            <Text text="{books>Genre}"/>
+                            <Text text="{
+                                path: 'books>ReleaseDate',
+                                type: 'sap.ui.model.type.Date',
+                                formatOptions: {
+                                    pattern: 'dd MMM yyyy'
+                                }
+                            }"/>
+                            <ObjectNumber
+                                number="{books>AvailableQuantity}"
+                                unit="pcs"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </Panel>
+        </content>
     </Page>
 </mvc:View>
