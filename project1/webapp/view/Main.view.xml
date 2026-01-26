@@ -1,17 +1,17 @@
 <mvc:View controllerName="project1.controller.Main"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
     <Page id="page" title="{i18n>title}">
         <content>
             <Panel accessibleRole="Region">
                 <Table id="booksTable"
                     class="sapUiResponsiveMargin"
                     width="auto"
+                    mode="MultiSelect"
+                    selectionChange="onSelectionChange"
                     items="{
-                        path: 'books>/books',
-                        sorter: {
-                            path: 'ID'
-                        }
+                        path: 'books>/books'
                     }">
                 <headerToolbar>
                     <OverflowToolbar>
@@ -26,6 +26,20 @@
                 <infoToolbar>
                     <OverflowToolbar>
                         <Label text="Available books in the library"/>
+                        <ToolbarSpacer/>
+                        <Input 
+                            id="bookTitleInput"
+                            width="15em"
+                            placeholder="Filter by title..."/>
+                        <Select
+                            id="genreSelect"
+                            width="10em"
+                            forceSelection="false"
+                            selectedKey="{books>/SelectedGenre}"
+                            items="{books>/booksGenre}">
+                            <core:Item key="{books>key}" text="{books>text}" />
+                        </Select>
+                        <Button text="Filter" press="onFilter" type="Emphasized"/>
                     </OverflowToolbar>
                 </infoToolbar>
                 <columns>
@@ -82,6 +96,11 @@
                     </ColumnListItem>
                 </items>
             </Table>
+            <Toolbar>
+                <ToolbarSpacer/>
+                <Button text="Add Record" press="addRecord" type="Accept"/>
+                <Button text="Delete Records" press="deleteRecords" type="Reject" enabled="{= ${books>/selectedItems} > 0}"/>
+            </Toolbar>
         </Panel>
         </content>
     </Page>
