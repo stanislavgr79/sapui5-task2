@@ -1,27 +1,46 @@
 sap.ui.define([
     "./BaseController"
-], (BaseController, models) => {
+], (BaseController) => {
     "use strict";
 
  return BaseController.extend("project1.controller.Main", {
         onInit() {
-
+            this._ensureLostEditFocusHandler();
         },
 
         onBeforeRendering() {
-            var genres = this._getUniqueGenres();
+            const genres = this._getUniqueGenres();
             this.getModel("books").setProperty("/booksGenre", genres);
         },
 
+        onAfterRendering: function() {
+        },
+
+        onExit: function() {
+            if (this._onLostEditFocus) {
+                document.removeEventListener("click", this._onLostEditFocus, true);
+            }
+        },
+
         onSelectionChange: function() {
-            var selectedItems = this.byId("booksTable").getSelectedItems().length;
+            const selectedItems = this.byId("booksTable").getSelectedItems().length;
             this.getModel("books").setProperty("/selectedItems", selectedItems);
         },
 
+        addRecord: function() {
+            const model = this.getModel("books");
+            const books = model.getProperty("/books");
+            
+            const oNewBook = this._getNewEmptyBook();
+            books.push(oNewBook);
+            
+            model.setProperty("/books", books);
+        },
+
         deleteRecords: function() {
-            var selected = this.byId("booksTable").getSelectedItems();
-            var model = this.getModel("books");
-            var books = model.getProperty("/books");
+            const selected = this.byId("booksTable").getSelectedItems();
+            const model = this.getModel("books");
+            const books = model.getProperty("/books");
             
             selected.forEach(item => {
                 var oBook = item.getBindingContext("books").getObject();
@@ -33,23 +52,88 @@ sap.ui.define([
             this.byId("booksTable").removeSelections();
         },
 
-        addRecord: function() {
-            var model = this.getModel("books");
-            var books = model.getProperty("/books");
+        onFilter: function() {
+            const input = this.byId("bookTitleInput").getValue().trim();
+            const genre = this.byId("genreSelect").getSelectedKey();
             
-            books.push(
-                this._getNewEmptyBook()
-            );
-            
-            model.setProperty("/books", books);
+            const table = this.byId("booksTable");
+            const items = table.getBinding("items");
+            const filters = [];
+
+            if (input) {
+                filters.push(new sap.ui.model.Filter("Name", sap.ui.model.FilterOperator.Contains, input));
+            }
+
+            if (genre && genre !== "All") {
+                filters.push(new sap.ui.model.Filter("Genre", sap.ui.model.FilterOperator.EQ, genre));
+            }
+
+            items.filter(filters);
+        },
+
+        onEdit: function (oEvent) {
+            const oEditButton = oEvent.getSource();
+            const oHBox = oEditButton.getParent();
+            const oListItem = oHBox.getParent();
+
+            const oContext = oListItem.getBindingContext("books");
+            const oBooksModel = this.getModel("books");
+            const sPath = oContext.getPath();
+            oBooksModel.setProperty(sPath + "/isEditMode", true);
+        },
+
+        onSave: function (oEvent) {
+            let oListItem = oEvent.getSource();
+            const oContext = oListItem.getBindingContext("books");
+            const oObject = oContext.getObject();
+            if (Object.prototype.hasOwnProperty.call(oObject, "isEditMode")) {
+                delete oObject.isEditMode;
+            }
+            this.getModel("books").refresh(true);
+        },
+
+        _ensureLostEditFocusHandler: function() {
+            if (!this._onLostEditFocus) {
+                this._onLostEditFocus = this._handleLostEditFocus.bind(this);
+            }
+
+            document.addEventListener("click", this._onLostEditFocus, true);
+        },
+
+        _handleLostEditFocus: function(oEvent) {
+            const oTarget = oEvent && oEvent.target;
+            const oGenreSelect = this.byId("genreSelect");
+            const oSelectPicker = oGenreSelect?.getPicker ? oGenreSelect.getPicker() : null;
+            const oPickerDom = oSelectPicker?.getDomRef ? oSelectPicker.getDomRef() : null;
+
+            if (oTarget && (oTarget.closest(".rowEditInput") || oTarget.closest(".actionButtons"))) {
+                return;
+            }
+
+            if (oTarget && oPickerDom?.contains(oTarget)) {
+                return;
+            }
+
+            this._cancelActiveEdit();
+        },
+
+        _cancelActiveEdit: function () {
+            const oBooksModel = this.getModel("books");
+            const aBooks = oBooksModel.getProperty("/books") || [];
+            aBooks.forEach(book => {
+                if (Object.prototype.hasOwnProperty.call(book, "isEditMode")) {
+                    delete book.isEditMode;
+                }
+            });
+            oBooksModel.refresh(true);
         },
 
         _getUniqueGenres: function() {
-            var books = this.getModel("books").getProperty("/books");
-            var genres = [...new Set(books.map(book => book.Genre))];
+            const books = this.getModel("books").getProperty("/books");
+            const genres = [...new Set(books.map(book => book.Genre))];
             genres.sort();
             
-            var aGenreObjects = [{ key: "All", text: "" }];
+            const aGenreObjects = [{ key: "All", text: "" }];
             genres.forEach(genre => {
                 aGenreObjects.push({ key: genre, text: genre });
             });
@@ -65,25 +149,6 @@ sap.ui.define([
                 ReleaseDate: null,
                 AvailableQuantity: 0
             };
-        },
-
-        onFilter: function() {
-            var input = this.byId("bookTitleInput").getValue().trim();
-            var genre = this.byId("genreSelect").getSelectedKey();
-            
-            var table = this.byId("booksTable");
-            var items = table.getBinding("items");
-            var filters = [];
-
-            if (input) {
-                filters.push(new sap.ui.model.Filter("Name", sap.ui.model.FilterOperator.Contains, input));
-            }
-
-            if (genre && genre !== "All") {
-                filters.push(new sap.ui.model.Filter("Genre", sap.ui.model.FilterOperator.EQ, genre));
-            }
-
-            items.filter(filters);
         }
     });
 }); 
