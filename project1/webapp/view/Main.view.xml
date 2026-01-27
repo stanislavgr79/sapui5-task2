@@ -71,15 +71,24 @@
                         <Text text="Release Date"/>
                     </Column>
                     <Column
-                        hAlign="End">
+                        hAlign="Center"
+                        width="6em">
                         <Text text="Available"/>
+                    </Column>
+                    <Column
+                        hAlign="Center">
+                        <Text text="Actions"/>
                     </Column>
                 </columns>
                 <items>
                     <ColumnListItem vAlign="Middle">
                         <cells>
                             <ObjectIdentifier title="{books>ID}"/>
-                            <Text text="{books>Name}"/>
+                            <VBox>
+                                <Text text="{books>Name}" visible="{= ${books>isEditMode} !== true }"/>
+                                <Input class="rowEditInput" value="{books>Name}" visible="{= ${books>isEditMode} === true }"
+                                    submit="onSave"/>
+                            </VBox>
                             <Text text="{books>Author}"/>
                             <Text text="{books>Genre}"/>
                             <Text text="{
@@ -92,6 +101,12 @@
                             <ObjectNumber
                                 number="{books>AvailableQuantity}"
                                 unit="pcs"/>
+                            <HBox justifyContent="Center" class="actionButtons">
+                                <Button text="Edit" type="Transparent"
+                                    press="onEdit" visible="{= ${books>isEditMode} !== true }" width="4rem"/>
+                                <Button text="Save" type="Transparent"
+                                    press="onSave" visible="{= ${books>isEditMode} === true }" width="4rem"/>
+                            </HBox>
                         </cells>
                     </ColumnListItem>
                 </items>

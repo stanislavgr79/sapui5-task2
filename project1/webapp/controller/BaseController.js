@@ -8,7 +8,7 @@ sap.ui.define([
   return Controller.extend("project1.controller.BaseController", {
  
     getModel: function(sName) {
-      return this.getView().getModel(sName);
+      return this.getView().getModel(sName) || this.getOwnerComponent().getModel(sName);
     },
  
     setModel: function(oModel, sName) {
