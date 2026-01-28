@@ -1,0 +1,125 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns="sap.m">
+    <Dialog
+        title="Create New Record"
+        contentWidth="40rem"
+        resizable="true">
+        <content>
+            <l:VerticalLayout class="sapUiContentPadding" width="100%">
+                <HBox>
+                    <Text text="ID" width="10rem"/>
+                    <Input
+                        id="addBookId"
+                        required="true"
+                        value="{
+                            path: 'books>/newBooks/ID',
+                            type:'sap.ui.model.type.Integer',
+                            constraints: { minimum: 0 }
+                        }"
+                        valueState="{= ${books>/newBooks/ID} === '' ? 'Error' : 'None' }"
+                        valueStateText="Required"
+                        width="100%">
+                        <layoutData>
+                            <FlexItemData growFactor="1" />
+                        </layoutData>
+                    </Input>
+                </HBox>
+                <HBox>
+                    <Text text="Name" width="10rem"/>
+                    <Input
+                        id="addBookName"
+                        required="true"
+                        value="{
+                            path: 'books>/newBooks/Name',
+                            type: 'sap.ui.model.type.String'
+                        }"
+                        valueState="{= ${books>/newBooks/Name} === '' ? 'Error' : 'None' }"
+                        valueStateText="Required"
+                        width="100%">
+                        <layoutData>
+                            <FlexItemData growFactor="1" />
+                        </layoutData>
+                    </Input>
+                </HBox>
+                <HBox>
+                    <Text text="Author" width="10rem"/>
+                    <Input
+                        id="addBookAuthor"
+                        required="true"
+                        value="{
+                            path: 'books>/newBooks/Author',
+                            type: 'sap.ui.model.type.String'
+                        }"
+                        valueState="{= ${books>/newBooks/Author} === '' ? 'Error' : 'None' }"
+                        valueStateText="Required"
+                        width="100%">
+                        <layoutData>
+                            <FlexItemData growFactor="1" />
+                        </layoutData>
+                    </Input>
+                </HBox>
+                <HBox>
+                    <Text text="Genre" width="10rem"/>
+                    <Input
+                        id="addBookGenre"
+                        required="true"
+                        value="{
+                            path: 'books>/newBooks/Genre',
+                            type: 'sap.ui.model.type.String'
+                        }"
+                        valueState="{= ${books>/newBooks/Genre} === '' ? 'Error' : 'None' }"
+                        valueStateText="Required"
+                        width="100%">
+                        <layoutData>
+                            <FlexItemData growFactor="1" />
+                        </layoutData>
+                    </Input>
+                </HBox>
+                <HBox>
+                    <Text text="Release Date" width="10rem"/>
+                    <DatePicker
+                        id="addBookReleaseDate"
+                        required="true"
+                        value="{
+                            path: 'books>/newBooks/ReleaseDate',
+                            type: 'sap.ui.model.type.Date',
+                            formatOptions: { pattern: 'yyyy-MM-dd' }
+                        }"
+                        valueFormat="yyyy-MM-dd"
+                        displayFormat="yyyy-MM-dd"
+                        valueState="{= ${books>/newBooks/ReleaseDate} === null ? 'Error' : 'None' }"
+                        valueStateText="Required"
+                        width="100%" />
+                </HBox>
+                <HBox>
+                    <Text text="Available" width="10rem"/>
+                    <Input
+                        id="addBookAvailable"
+                        value="{
+                            path:'books>/newBooks/AvailableQuantity', 
+                            type:'sap.ui.model.type.Integer',
+                            constraints: { minimum: 0 }
+                         }"
+                        required="true"
+                        width="100%"/>
+                </HBox>
+            </l:VerticalLayout>
+        </content>
+        <beginButton>
+        <Button
+            text="Add"
+            type="Emphasized"
+            enabled="{= ${books>/newBooks/ID} > 0
+                &amp;&amp; ${books>/newBooks/Name} !== ''
+                &amp;&amp; ${books>/newBooks/Author} !== ''
+                &amp;&amp; ${books>/newBooks/Genre} !== ''
+                &amp;&amp; ${books>/newBooks/ReleaseDate} !== null }"
+            press="addRecord"/>
+        </beginButton>
+        <endButton>
+            <Button text="Cancel" type="Transparent" press="onCloseAddRecordDialog"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

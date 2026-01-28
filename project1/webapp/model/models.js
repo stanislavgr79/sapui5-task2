@@ -22,6 +22,14 @@ function (JSONModel, Device) {
          */
         createBooksModel: function () {
             var oModel = new JSONModel({
+                newBooks: {
+                        ID: "",
+                        Name: "",
+                        Author: "",
+                        Genre: "",
+                        ReleaseDate: null,
+                        AvailableQuantity: 0
+                },
                 books: [
                     {
                         ID: "1",

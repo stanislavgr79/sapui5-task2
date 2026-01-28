@@ -40,11 +40,36 @@ sap.ui.define([
         addRecord: function() {
             const model = this.getModel("books");
             const books = model.getProperty("/books");
-            
-            const oNewBook = this._getNewEmptyBook();
-            books.push(oNewBook);
-            
+
+            books.push(model.getProperty("/newBooks"));            
             model.setProperty("/books", books);
+            //update genres
+            const genres = this._getUniqueGenres();
+            model.setProperty("/booksGenre", genres);
+
+            if (this.oAddRecordDialog) {
+                this.oAddRecordDialog.close();
+            }
+            this._resetNewBookForm();
+        },
+
+        async onOpenAddRecordDialog() {
+            if (!this.oAddRecordDialog) {
+                const oAddRecordDialog = await this.loadFragment({
+                    name: "project1.view.fragments.AddRecords"
+                });
+                this.oAddRecordDialog = oAddRecordDialog;
+
+                this.getView().addDependent(this.oAddRecordDialog);
+            }
+            this.oAddRecordDialog.open();
+		},
+
+        onCloseAddRecordDialog: function() {
+            this._resetNewBookForm();
+            if (this.oAddRecordDialog) {
+                this.oAddRecordDialog.close();
+            }
         },
 
         deleteRecords: function() {
@@ -58,6 +83,10 @@ sap.ui.define([
             });
             
             model.setProperty("/books", books);
+            //update genres
+            const genres = this._getUniqueGenres();
+            model.setProperty("/booksGenre", genres);
+
             model.setProperty("/selectedItems", 0);
             this.byId("booksTable").removeSelections();
         },
@@ -177,14 +206,16 @@ sap.ui.define([
             return aGenreObjects;
         },
 
-        _getNewEmptyBook: function() {
-            return {
+        _resetNewBookForm: function () {
+            const model = this.getModel("books");
+            model.setProperty("/newBooks", {
+                ID: "",
                 Name: "",
                 Author: "",
                 Genre: "",
                 ReleaseDate: null,
                 AvailableQuantity: 0
-            };
+            });
         }
     });
 }); 
