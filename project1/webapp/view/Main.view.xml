@@ -114,7 +114,7 @@
             <Toolbar>
                 <ToolbarSpacer/>
                 <Button text="Add Record" press="addRecord" type="Accept"/>
-                <Button text="Delete Records" press="deleteRecords" type="Reject" enabled="{= ${books>/selectedItems} > 0}"/>
+                <Button text="Delete Records" press=".onDeleteDialogPress" type="Reject" enabled="{= ${books>/selectedItems} > 0}"/>
             </Toolbar>
         </Panel>
         </content>
