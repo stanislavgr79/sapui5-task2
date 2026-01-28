@@ -1,7 +1,17 @@
 sap.ui.define([
-    "./BaseController"
-], (BaseController) => {
+    "./BaseController",
+    "sap/m/Dialog",
+	"sap/m/Button",
+    "sap/m/Text",
+    "sap/m/library"
+], (BaseController, Dialog, Button, Text, mobileLibrary) => {
     "use strict";
+
+    // shortcut for sap.m.ButtonType
+	var ButtonType = mobileLibrary.ButtonType;
+
+	// shortcut for sap.m.DialogType
+	var DialogType = mobileLibrary.DialogType;
 
  return BaseController.extend("project1.controller.Main", {
         onInit() {
@@ -51,6 +61,32 @@ sap.ui.define([
             model.setProperty("/selectedItems", 0);
             this.byId("booksTable").removeSelections();
         },
+
+        onDeleteDialogPress: function () {
+			if (!this.oDeleteDialog) {
+				this.oDeleteDialog = new Dialog({
+					type: DialogType.Message,
+					title: "Confirm",
+					content: new Text({ text: "Are you sure you want to delete selected records?" }),
+					beginButton: new Button({
+						type: ButtonType.Emphasized,
+						text: "Yes",
+						press: function () {
+							this.deleteRecords();
+							this.oDeleteDialog.close();
+						}.bind(this)
+					}),
+					endButton: new Button({
+						text: "No",
+						press: function () {
+							this.oDeleteDialog.close();
+						}.bind(this)
+					})
+				});
+			}
+
+			this.oDeleteDialog.open();
+		},
 
         onFilter: function() {
             const input = this.byId("bookTitleInput").getValue().trim();
