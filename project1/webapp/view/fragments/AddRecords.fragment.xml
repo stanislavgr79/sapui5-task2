@@ -9,17 +9,17 @@
         <content>
             <l:VerticalLayout class="sapUiContentPadding" width="100%">
                 <HBox>
-                    <Text text="ID" width="10rem"/>
+                    <Text 
+                        text="ID" width="10rem"/>
                     <Input
                         id="addBookId"
                         required="true"
+                        type="Number"
                         value="{
                             path: 'books>/newBooks/ID',
-                            type:'sap.ui.model.type.Integer',
+                            type: 'sap.ui.model.type.Integer',
                             constraints: { minimum: 0 }
                         }"
-                        valueState="{= ${books>/newBooks/ID} === '' ? 'Error' : 'None' }"
-                        valueStateText="Required"
                         width="100%">
                         <layoutData>
                             <FlexItemData growFactor="1" />
@@ -31,11 +31,15 @@
                     <Input
                         id="addBookName"
                         required="true"
+                        core:require="{
+                                    Validate: 'project1/validate/validate'
+                        }"
                         value="{
                             path: 'books>/newBooks/Name',
                             type: 'sap.ui.model.type.String'
                         }"
-                        valueState="{= ${books>/newBooks/Name} === '' ? 'Error' : 'None' }"
+                        change="Validate.onValidateName"
+                        valueState="{= ${books>/validate/isValidName} === true ? 'None' : 'Error'}"
                         valueStateText="Required"
                         width="100%">
                         <layoutData>
@@ -48,11 +52,15 @@
                     <Input
                         id="addBookAuthor"
                         required="true"
+                        core:require="{
+                                    Validate: 'project1/validate/validate'
+                        }"
                         value="{
                             path: 'books>/newBooks/Author',
                             type: 'sap.ui.model.type.String'
                         }"
-                        valueState="{= ${books>/newBooks/Author} === '' ? 'Error' : 'None' }"
+                        change="Validate.onValidateAuthor"
+                        valueState="{= ${books>/validate/isValidAuthor} === true ? 'None' : 'Error'}"
                         valueStateText="Required"
                         width="100%">
                         <layoutData>
@@ -65,11 +73,15 @@
                     <Input
                         id="addBookGenre"
                         required="true"
+                        core:require="{
+                                    Validate: 'project1/validate/validate'
+                        }"
                         value="{
                             path: 'books>/newBooks/Genre',
                             type: 'sap.ui.model.type.String'
                         }"
-                        valueState="{= ${books>/newBooks/Genre} === '' ? 'Error' : 'None' }"
+                        change="Validate.onValidateGenre"
+                        valueState="{= ${books>/validate/isValidGenre} === true ? 'None' : 'Error'}"
                         valueStateText="Required"
                         width="100%">
                         <layoutData>
@@ -82,21 +94,25 @@
                     <DatePicker
                         id="addBookReleaseDate"
                         required="true"
+                        core:require="{
+                                    Validate: 'project1/validate/validate'
+                        }"
                         value="{
                             path: 'books>/newBooks/ReleaseDate',
                             type: 'sap.ui.model.type.Date',
                             formatOptions: { pattern: 'yyyy-MM-dd' }
                         }"
+                        change="Validate.onValidateReleaseDate"
                         valueFormat="yyyy-MM-dd"
                         displayFormat="yyyy-MM-dd"
-                        valueState="{= ${books>/newBooks/ReleaseDate} === null ? 'Error' : 'None' }"
-                        valueStateText="Required"
+                        valueState="{= ${books>/validate/isValidReleaseDate} === true ? 'None' : 'Error'}"
                         width="100%" />
                 </HBox>
                 <HBox>
                     <Text text="Available" width="10rem"/>
                     <Input
                         id="addBookAvailable"
+                        type="Number"
                         value="{
                             path:'books>/newBooks/AvailableQuantity', 
                             type:'sap.ui.model.type.Integer',
@@ -108,14 +124,10 @@
             </l:VerticalLayout>
         </content>
         <beginButton>
-        <Button
+            <Button
             text="Add"
             type="Emphasized"
-            enabled="{= ${books>/newBooks/ID} > 0
-                &amp;&amp; ${books>/newBooks/Name} !== ''
-                &amp;&amp; ${books>/newBooks/Author} !== ''
-                &amp;&amp; ${books>/newBooks/Genre} !== ''
-                &amp;&amp; ${books>/newBooks/ReleaseDate} !== null }"
+            enabled="{books>/validate/isFormValid}"
             press="addRecord"/>
         </beginButton>
         <endButton>
