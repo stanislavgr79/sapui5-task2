@@ -3,14 +3,14 @@
     xmlns:l="sap.ui.layout"
     xmlns="sap.m">
     <Dialog
-        title="Create New Record"
+        title="{i18n>dialogCreateTitle}"
         contentWidth="40rem"
         resizable="true">
         <content>
             <l:VerticalLayout class="sapUiContentPadding" width="100%">
                 <HBox>
                     <Text 
-                        text="ID" width="10rem"/>
+                        text="{i18n>fieldId}" width="10rem"/>
                     <Input
                         id="addBookId"
                         required="true"
@@ -27,7 +27,7 @@
                     </Input>
                 </HBox>
                 <HBox>
-                    <Text text="Name" width="10rem"/>
+                    <Text text="{i18n>fieldName}" width="10rem"/>
                     <Input
                         id="addBookName"
                         required="true"
@@ -40,7 +40,7 @@
                         }"
                         change="Validate.onValidateName"
                         valueState="{= ${books>/validate/isValidName} === true ? 'None' : 'Error'}"
-                        valueStateText="Required"
+                        valueStateText="{i18n>valueStateRequired}"
                         width="100%">
                         <layoutData>
                             <FlexItemData growFactor="1" />
@@ -48,7 +48,7 @@
                     </Input>
                 </HBox>
                 <HBox>
-                    <Text text="Author" width="10rem"/>
+                    <Text text="{i18n>fieldAuthor}" width="10rem"/>
                     <Input
                         id="addBookAuthor"
                         required="true"
@@ -61,7 +61,7 @@
                         }"
                         change="Validate.onValidateAuthor"
                         valueState="{= ${books>/validate/isValidAuthor} === true ? 'None' : 'Error'}"
-                        valueStateText="Required"
+                        valueStateText="{i18n>valueStateRequired}"
                         width="100%">
                         <layoutData>
                             <FlexItemData growFactor="1" />
@@ -69,7 +69,7 @@
                     </Input>
                 </HBox>
                 <HBox>
-                    <Text text="Genre" width="10rem"/>
+                    <Text text="{i18n>fieldGenre}" width="10rem"/>
                     <Input
                         id="addBookGenre"
                         required="true"
@@ -82,7 +82,7 @@
                         }"
                         change="Validate.onValidateGenre"
                         valueState="{= ${books>/validate/isValidGenre} === true ? 'None' : 'Error'}"
-                        valueStateText="Required"
+                        valueStateText="{i18n>valueStateRequired}"
                         width="100%">
                         <layoutData>
                             <FlexItemData growFactor="1" />
@@ -90,7 +90,7 @@
                     </Input>
                 </HBox>
                 <HBox>
-                    <Text text="Release Date" width="10rem"/>
+                    <Text text="{i18n>fieldReleaseDate}" width="10rem"/>
                     <DatePicker
                         id="addBookReleaseDate"
                         required="true"
@@ -106,10 +106,11 @@
                         valueFormat="yyyy-MM-dd"
                         displayFormat="yyyy-MM-dd"
                         valueState="{= ${books>/validate/isValidReleaseDate} === true ? 'None' : 'Error'}"
+                        valueStateText="{i18n>valueStateRequired}"
                         width="100%" />
                 </HBox>
                 <HBox>
-                    <Text text="Available" width="10rem"/>
+                    <Text text="{i18n>fieldAvailable}" width="10rem"/>
                     <Input
                         id="addBookAvailable"
                         type="Number"
@@ -125,13 +126,13 @@
         </content>
         <beginButton>
             <Button
-            text="Add"
+            text="{i18n>addButton}"
             type="Emphasized"
             enabled="{books>/validate/isFormValid}"
             press="addRecord"/>
         </beginButton>
         <endButton>
-            <Button text="Cancel" type="Transparent" press="onCloseAddRecordDialog"/>
+            <Button text="{i18n>cancelButton}" type="Transparent" press="onCloseAddRecordDialog"/>
         </endButton>
     </Dialog>
 </core:FragmentDefinition>

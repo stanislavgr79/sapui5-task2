@@ -1,0 +1,27 @@
+<mvc:View controllerName="project1.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Page id="page" title="{i18n>title}">
+        <content>
+            <IconTabBar
+                id="idIconTabBar"
+                expanded="{device>/isNoPhone}"
+                class="sapUiResponsiveContentPadding">
+                <items>
+                    <IconTabFilter text="JSON Model" key="json">
+                        <mvc:XMLView viewName="project1.view.pages.main.tabs.tabJson" />
+                    </IconTabFilter>
+
+                    <IconTabFilter text="oData v2 Model" key="v2">
+                        <mvc:XMLView viewName="project1.view.pages.main.tabs.tabOdataV2" />
+                    </IconTabFilter>
+
+                    <IconTabFilter text="oData v4 Model" key="v4">
+                        <mvc:XMLView viewName="project1.view.pages.main.tabs.tabOdataV4" />
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </content>
+    </Page>
+</mvc:View>

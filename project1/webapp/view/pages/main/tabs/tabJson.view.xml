@@ -1,0 +1,127 @@
+<mvc:View
+    controllerName="project1.controller.Main"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc">
+    <Panel accessibleRole="Region">
+        <Table id="booksTable"
+            class="sapUiResponsiveMargin"
+            width="auto"
+            mode="MultiSelect"
+            selectionChange="onSelectionChange"
+            items="{
+                path: 'books>/books'
+            }">
+            <headerToolbar>
+                <OverflowToolbar>
+                    <content>
+                        <Title text="{i18n>booksLibraryTitle}" level="H2" />
+                        <ToolbarSpacer />
+                        <Label text="{i18n>totalBooksLabel}" />
+                        <Text text="{books>/books/length}" />
+                    </content>
+                </OverflowToolbar>
+            </headerToolbar>
+            <infoToolbar>
+                <OverflowToolbar>
+                    <Label text="{i18n>availableBooksInfo}" />
+                    <ToolbarSpacer />
+                    <Input
+                        id="bookTitleInput"
+                        width="15em"
+                        placeholder="{i18n>filterByTitlePlaceholder}" />
+                    <Select
+                        id="genreSelect"
+                        width="10em"
+                        forceSelection="false"
+                        selectedKey="{books>/SelectedGenre}"
+                        items="{books>/booksGenre}">
+                        <core:Item key="{books>key}" text="{books>text}" />
+                    </Select>
+                    <Button text="{i18n>filterButton}" press="onFilter" type="Emphasized" />
+                </OverflowToolbar>
+            </infoToolbar>
+            <columns>
+                <Column width="4em">
+                    <Text text="{i18n>columnId}" />
+                </Column>
+                <Column
+                    width="25em"
+                    minScreenWidth="Tablet"
+                    demandPopin="true">
+                    <Text text="{i18n>columnName}" />
+                </Column>
+                <Column
+                    width="12em"
+                    minScreenWidth="Tablet"
+                    demandPopin="true">
+                    <Text text="{i18n>columnAuthor}" />
+                </Column>
+                <Column
+                    minScreenWidth="Desktop"
+                    demandPopin="true"
+                    hAlign="Center">
+                    <Text text="{i18n>columnGenre}" />
+                </Column>
+                <Column
+                    minScreenWidth="Desktop"
+                    demandPopin="true"
+                    hAlign="Center">
+                    <Text text="{i18n>columnReleaseDate}" />
+                </Column>
+                <Column
+                    hAlign="Center"
+                    width="6em">
+                    <Text text="{i18n>columnAvailable}" />
+                </Column>
+                <Column
+                    hAlign="Center">
+                    <Text text="{i18n>columnActions}" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem vAlign="Middle">
+                    <cells>
+                        <ObjectIdentifier title="{books>ID}" />
+                        <VBox>
+                            <Text text="{books>Name}" visible="{= ${books>isEditMode} !== true }" />
+                            <Input class="rowEditInput" value="{books>Name}"
+                                visible="{= ${books>isEditMode} === true }"
+                                submit="onSave" />
+                        </VBox>
+                        <Text text="{books>Author}" />
+                        <Text text="{books>Genre}" />
+                        <Text
+                            core:require="{
+                                Formatter: 'project1/formatters/formatter'
+                            }"
+                            text="{
+                                path: 'books>ReleaseDate',
+                                type: 'sap.ui.model.type.Date',
+                                formatter: 'Formatter.releaseDateYear'  
+                            }"
+                        />
+                        <ObjectNumber
+                            number="{books>AvailableQuantity}"
+                            unit="{i18n>unitPcs}" />
+                        <HBox justifyContent="Center" class="actionButtons">
+                            <Button text="{i18n>editButton}" type="Transparent"
+                                press="onEdit" visible="{= ${books>isEditMode} !== true }"
+                                width="4rem" />
+                            <Button text="{i18n>saveButton}" type="Transparent"
+                                press="onSave" visible="{= ${books>isEditMode} === true }"
+                                width="4rem" />
+                        </HBox>
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+        <Toolbar>
+            <ToolbarSpacer />
+            <Button text="{i18n>addRecordButton}" press=".onOpenAddRecordDialog" type="Accept" />
+            <Button text="{i18n>deleteRecordsButton}" press=".onDeleteDialogPress" type="Reject"
+                enabled="{= ${books>/selectedItems} > 0}" />
+        </Toolbar>
+    </Panel>
+</mvc:View>

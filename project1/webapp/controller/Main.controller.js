@@ -1,7 +1,7 @@
 sap.ui.define([
     "./BaseController",
     "sap/m/Dialog",
-	"sap/m/Button",
+    "sap/m/Button",
     "sap/m/Text",
     "sap/m/library",
     "../validate/validate"
@@ -9,14 +9,15 @@ sap.ui.define([
     "use strict";
 
     // shortcut for sap.m.ButtonType
-	var ButtonType = mobileLibrary.ButtonType;
+    var ButtonType = mobileLibrary.ButtonType;
 
-	// shortcut for sap.m.DialogType
-	var DialogType = mobileLibrary.DialogType;
+    // shortcut for sap.m.DialogType
+    var DialogType = mobileLibrary.DialogType;
 
  return BaseController.extend("project1.controller.Main", {
         onInit() {
             this._ensureLostEditFocusHandler();
+            this._oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
         },
 
         onBeforeRendering() {
@@ -60,7 +61,7 @@ sap.ui.define([
         async onOpenAddRecordDialog() {
             if (!this.oAddRecordDialog) {
                 const oAddRecordDialog = await this.loadFragment({
-                    name: "project1.view.fragments.AddRecords"
+                    name: "project1.view.pages.main.fragments.AddRecords"
                 });
                 this.oAddRecordDialog = oAddRecordDialog;
 
@@ -97,30 +98,30 @@ sap.ui.define([
         },
 
         onDeleteDialogPress: function () {
-			if (!this.oDeleteDialog) {
-				this.oDeleteDialog = new Dialog({
-					type: DialogType.Message,
-					title: "Confirm",
-					content: new Text({ text: "Are you sure you want to delete selected records?" }),
-					beginButton: new Button({
-						type: ButtonType.Emphasized,
-						text: "Yes",
-						press: function () {
-							this.deleteRecords();
-							this.oDeleteDialog.close();
-						}.bind(this)
-					}),
-					endButton: new Button({
-						text: "No",
-						press: function () {
-							this.oDeleteDialog.close();
-						}.bind(this)
-					})
-				});
-			}
+            const oBundle = this._oBundle;
+            const oDeleteDialog = new Dialog({
+                type: DialogType.Message,
+                title: oBundle.getText("confirmTitle"),
+                content: new Text({ text: oBundle.getText("confirmDeleteMessage") }),
+                beginButton: new Button({
+                    type: ButtonType.Emphasized,
+                    text: oBundle.getText("yesButton"),
+                    press: function () {
+                        this.deleteRecords();
+                        this.oDeleteDialog.close();
+                    }.bind(this)
+                }),
+                endButton: new Button({
+                    text: oBundle.getText("noButton"),
+                    press: function () {
+                        this.oDeleteDialog.close();
+                    }.bind(this)
+                })
+            });
+            this.oDeleteDialog = oDeleteDialog;
 
-			this.oDeleteDialog.open();
-		},
+            this.oDeleteDialog.open();
+        },
 
         onFilter: function() {
             const input = this.byId("bookTitleInput").getValue().trim();
