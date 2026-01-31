@@ -22,6 +22,21 @@ function (JSONModel, Device) {
          */
         createBooksModel: function () {
             var oModel = new JSONModel({
+                validate: {
+                    isValidName: true,
+                    isValidAuthor: true,
+                    isValidGenre: true,
+                    isValidReleaseDate: true,
+                    isFormValid: true
+                },
+                newBooks: {
+                        ID: 0,
+                        Name: "",
+                        Author: "",
+                        Genre: "",
+                        ReleaseDate: null,
+                        AvailableQuantity: 0
+                },
                 books: [
                     {
                         ID: "1",
