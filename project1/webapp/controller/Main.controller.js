@@ -4,8 +4,10 @@ sap.ui.define([
     "sap/m/Button",
     "sap/m/Text",
     "sap/m/library",
-    "../validate/validate"
-], (BaseController, Dialog, Button, Text, mobileLibrary, validate) => {
+    "../validate/validate",
+    "sap/m/MessageBox",
+	"sap/m/MessageToast"
+], (BaseController, Dialog, Button, Text, mobileLibrary, validate, MessageBox, MessageToast) => {
     "use strict";
 
     // shortcut for sap.m.ButtonType
@@ -18,6 +20,8 @@ sap.ui.define([
         onInit() {
             this._ensureLostEditFocusHandler();
             this._oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            //Main.controller.js:23 v2 model batch usage: true
+            console.log("v2 model batch usage: " + this.getModel("v2").bUseBatch);
         },
 
         onBeforeRendering() {
@@ -37,6 +41,40 @@ sap.ui.define([
         onSelectionChange: function() {
             const selectedItems = this.byId("booksTable").getSelectedItems().length;
             this.getModel("books").setProperty("/selectedItems", selectedItems);
+        },
+
+        //v2 OData Table
+        // oModel.remove("/Products(999)", {success: mySuccessHandler, error: myErrorHandler});
+        onDeleteV2Press: function () {
+            const selected = this.byId("productsTableV2").getSelectedItems();
+            const oBundle = this._oBundle;  
+            const oModel = this.getModel("v2");
+            oModel.setDeferredGroups(oModel.getDeferredGroups().concat(["deleteGroup"]));
+            const oModelV2View = this.getModel("v2view");
+
+            selected.forEach(item => {
+                var oProduct = item.getBindingContext("v2").getObject();
+                oModel.remove("/Products(" + oProduct.ID + ")", {
+                    groupId: "deleteGroup",
+                    success: function() {
+                        MessageToast.show(oBundle.getText("deleteSuccessMessage")); 
+                    },
+                    error: function() {
+                        MessageBox.error(oBundle.getText("deleteErrorMessage")); 
+                    }
+                });
+            });
+            oModel.submitChanges({
+                groupId: "deleteGroup"
+            });
+
+            oModelV2View.setProperty("/selectedItems", 0);
+            this.byId("productsTableV2").removeSelections(); 
+        },
+
+        onSelectionChangeV2: function() {
+            const selectedItemsV2 = this.byId("productsTableV2").getSelectedItems().length;
+            this.getModel("v2view").setProperty("/selectedItems", selectedItemsV2);
         },
 
         addRecord: function() {
