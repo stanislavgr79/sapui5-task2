@@ -14,9 +14,10 @@
             <OverflowToolbar>
                 <Title text="Products (V2)" level="H2" />
                 <ToolbarSpacer />
+                <Button text="{i18n>addRecordButton}" press=".onOpenAddRecordProductDialogV2" type="Accept" />
                 <Button 
                     text="{i18n>deleteRecordsButton}" press=".onDeleteV2Press" type="Reject"
-                    enabled="{= ${v2view>/selectedItems} > 0}" />
+                    enabled="{= ${modelV2>/selectedItems} > 0}" />
             </OverflowToolbar>
         </headerToolbar>
         <columns>

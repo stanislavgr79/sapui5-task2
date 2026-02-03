@@ -16,6 +16,22 @@ function (JSONModel, Device) {
             return oModel;
         },
 
+        productModelV2: function () {
+            var oModel = new JSONModel({
+                selectedItems: 0,
+                validate: {
+                    isValidId: true,
+                    isValidName: true,
+                    isValidDescription: true,
+                    isValidReleaseDate: true,
+                    isValidPrice: true,
+                    isValidRating: true,
+                    isFormValid: true
+                }
+            });
+            return oModel;
+        },
+
         /**
          * Creates and returns a JSON model with book data
          * @returns {sap.ui.model.json.JSONModel} The books model with dummy data

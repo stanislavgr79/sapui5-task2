@@ -4,10 +4,11 @@ sap.ui.define([
     "sap/m/Button",
     "sap/m/Text",
     "sap/m/library",
-    "../validate/validate",
+    "../validate/validateBook",
+    "../validate/validateProductV2",
     "sap/m/MessageBox",
 	"sap/m/MessageToast"
-], (BaseController, Dialog, Button, Text, mobileLibrary, validate, MessageBox, MessageToast) => {
+], (BaseController, Dialog, Button, Text, mobileLibrary, validateBook, validateProductV2, MessageBox, MessageToast) => {
     "use strict";
 
     // shortcut for sap.m.ButtonType
@@ -53,7 +54,7 @@ sap.ui.define([
             if (!aDeferred.includes("deleteGroup")) {
                 oModel.setDeferredGroups(aDeferred.concat(["deleteGroup"]));
             }
-            const oModelV2View = this.getModel("v2view");
+            const oModelV2 = this.getModel("modelV2");
 
             selected.forEach(item => {
                 var oProduct = item.getBindingContext("v2").getObject();
@@ -71,13 +72,13 @@ sap.ui.define([
                 groupId: "deleteGroup"
             });
 
-            oModelV2View.setProperty("/selectedItems", 0);
+            oModelV2.setProperty("/selectedItems", 0);
             this.byId("productsTableV2").removeSelections(); 
         },
 
         onSelectionChangeV2: function() {
             const selectedItemsV2 = this.byId("productsTableV2").getSelectedItems().length;
-            this.getModel("v2view").setProperty("/selectedItems", selectedItemsV2);
+            this.getModel("modelV2").setProperty("/selectedItems", selectedItemsV2);
         },
 
         addRecord: function() {
@@ -110,6 +111,75 @@ sap.ui.define([
             }
             this.oAddRecordDialog.open();
 		},
+
+        addProductRecord: function() {
+            // get the binding context of the new entity from the dialog form
+            const oContext = this.oAddRecordProductDialogV2.getBindingContext("v2");
+            // get the new product data from the binding context
+            const oNewProduct = oContext.getObject();
+            // validate the new product data
+            if (!this._validateSubmitNewProduct(oNewProduct)) {
+                return;
+            }
+            const oModel = this.getModel("v2");
+            // submit the changes to the OData service
+            oModel.submitChanges({
+                success: function() {
+                    const oBinding = this.byId("productsTableV2").getBinding("items");
+                    // refresh the table binding to show the new product
+                    oBinding.refresh(true);
+                    MessageToast.show(this._oBundle.getText("addSuccessMessage"));
+                }.bind(this),
+                error: function() {
+                    MessageBox.error(this._oBundle.getText("addErrorMessage"));
+                }.bind(this)
+            });
+
+            if (this.oAddRecordProductDialogV2) {
+                this.oAddRecordProductDialogV2.close();
+            }
+        },
+
+        async onOpenAddRecordProductDialogV2() {
+            if (!this.oAddRecordProductDialogV2) {
+                const oAddRecordProductDialogV2 = await this.loadFragment({
+                    name: "project1.view.pages.main.fragments.AddRecordsV2"
+                });
+                this.oAddRecordProductDialogV2 = oAddRecordProductDialogV2;
+
+                this.getView().addDependent(this.oAddRecordProductDialogV2);
+            }
+            const modelV2 = this.getModel("v2");
+            // create a new entry in the OData model
+            let oContext = modelV2.createEntry("/Products", {
+                // not to send a POST request yet
+                inactive: true,
+                // initial properties for the new entity
+                properties: {
+                    ID: null,
+                    Name: "",
+                    Description: "",
+                    ReleaseDate: null,
+                    Price: 0,
+                    Rating: 0
+                }
+            });
+            // set the binding context of the dialog to the new entry
+            this.oAddRecordProductDialogV2.setBindingContext(oContext, "v2");
+            this.oAddRecordProductDialogV2.open();
+		},
+
+        onCloseAddRecordProductDialogV2: function() {
+            // reset validation state in the model JSON modelV2
+            this._resetValidateProductState();
+            // get the binding context of the created entity to be deleted
+            const oContext = this.oAddRecordProductDialogV2?.getBindingContext("v2");
+            // delete the created entity
+            oContext.delete();
+            if (this.oAddRecordProductDialogV2) {
+                this.oAddRecordProductDialogV2.close();
+            }
+        },
 
         onCloseAddRecordDialog: function() {
             this._resetNewBookForm();
@@ -277,11 +347,35 @@ sap.ui.define([
         },
 
         _validateSubmitNewBook: function (oNewBook) {
-            validate.callValidateName.call(this, oNewBook.Name);
-            validate.callValidateAuthor.call(this, oNewBook.Author);
-            validate.callValidateGenre.call(this, oNewBook.Genre);
-            validate.callValidateReleaseDate.call(this, oNewBook.ReleaseDate);
-            return validate.validateForm.call(this);
+            validateBook.callValidateName.call(this, oNewBook.Name);
+            validateBook.callValidateAuthor.call(this, oNewBook.Author);
+            validateBook.callValidateGenre.call(this, oNewBook.Genre);
+            validateBook.callValidateReleaseDate.call(this, oNewBook.ReleaseDate);
+            return validateBook.validateForm.call(this);
+        },
+
+        //v2
+        _resetValidateProductState: function () {
+            const model = this.getModel("modelV2");
+            model.setProperty("/validate", {
+                isValidId: true,
+                isValidName: true,
+                isValidDescription: true,
+                isValidReleaseDate: true,
+                isValidPrice: true,
+                isValidRating: true,
+                isFormValid: true
+            });
+        },
+
+        _validateSubmitNewProduct: function (oNewProduct) {
+            validateProductV2.callValidateId.call(this, oNewProduct.ID);
+            validateProductV2.callValidateName.call(this, oNewProduct.Name);
+            validateProductV2.callValidateDescription.call(this, oNewProduct.Description);
+            validateProductV2.callValidateReleaseDate.call(this, oNewProduct.ReleaseDate);
+            validateProductV2.callValidatePrice.call(this, oNewProduct.Price);
+            validateProductV2.callValidateRating.call(this, oNewProduct.Rating);
+            return validateProductV2.validateForm.call(this);
         }
     });
 });
