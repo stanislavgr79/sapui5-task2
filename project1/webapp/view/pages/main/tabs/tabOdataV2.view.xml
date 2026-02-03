@@ -1,0 +1,50 @@
+<mvc:View
+    controllerName="project1.controller.Main"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc">
+    <Table
+        id="productsTableV2"
+        class="sapUiResponsiveMargin"
+        width="auto"
+        items="{ path: 'v2>/Products' }">
+        <headerToolbar>
+            <OverflowToolbar>
+                <Title text="Products (V2)" level="H2" />
+                <ToolbarSpacer />
+            </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+            <Column width="4em">
+                <Text text="ID" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+                <Text text="Name" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+                <Text text="Description" />
+            </Column>
+            <Column minScreenWidth="Desktop" demandPopin="true">
+                <Text text="ReleaseDate" />
+            </Column>
+            <Column hAlign="End">
+                <Text text="Price" />
+            </Column>
+            <Column hAlign="Center">
+                <Text text="Rating" />
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem vAlign="Middle">
+                <cells>
+                    <Text text="{v2>ID}" />
+                    <Text text="{v2>Name}" />
+                    <Text text="{v2>Description}" />
+                    <Text text="{v2>ReleaseDate}" />
+                    <ObjectNumber number="{v2>Price}" />
+                    <Text text="{v2>Rating}" />
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+</mvc:View>
