@@ -49,7 +49,10 @@ sap.ui.define([
             const selected = this.byId("productsTableV2").getSelectedItems();
             const oBundle = this._oBundle;  
             const oModel = this.getModel("v2");
-            oModel.setDeferredGroups(oModel.getDeferredGroups().concat(["deleteGroup"]));
+            const aDeferred = oModel.getDeferredGroups() || [];
+            if (!aDeferred.includes("deleteGroup")) {
+                oModel.setDeferredGroups(aDeferred.concat(["deleteGroup"]));
+            }
             const oModelV2View = this.getModel("v2view");
 
             selected.forEach(item => {
