@@ -3,7 +3,7 @@
     xmlns:l="sap.ui.layout"
     xmlns="sap.m">
     <Dialog
-        title="{i18n>dialogCreateTitle}"
+        title="{i18n>dialogEditTitle}"
         contentWidth="40rem"
         resizable="true">
         <content>
@@ -11,13 +11,13 @@
         </content>
         <beginButton>
             <Button
-            text="{i18n>addButton}"
+            text="{i18n>saveButton}"
             type="Emphasized"
             enabled="{modelV2>/validate/isFormValid}"
-            press="addProductRecordV2"/>
+            press="editProductRecordV2"/>
         </beginButton>
         <endButton>
-            <Button text="{i18n>cancelButton}" type="Transparent" press="onCloseAddRecordProductDialogV2"/>
+            <Button text="{i18n>cancelButton}" type="Transparent" press="onCloseEditRecordProductDialogV2"/>
         </endButton>
     </Dialog>
 </core:FragmentDefinition>

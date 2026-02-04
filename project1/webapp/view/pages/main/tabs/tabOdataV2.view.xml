@@ -30,7 +30,7 @@
             <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="Description" />
             </Column>
-            <Column minScreenWidth="Desktop" demandPopin="true">
+            <Column width="15rem" minScreenWidth="Desktop" demandPopin="true">
                 <Text text="ReleaseDate" />
             </Column>
             <Column hAlign="End">
@@ -38,6 +38,9 @@
             </Column>
             <Column hAlign="Center">
                 <Text text="Rating" />
+            </Column>
+            <Column hAlign="Center">
+                <Text text="{i18n>columnActions}"/>
             </Column>
         </columns>
         <items>
@@ -49,6 +52,7 @@
                     <Text text="{v2>ReleaseDate}" />
                     <ObjectNumber number="{v2>Price}" />
                     <Text text="{v2>Rating}" />
+                    <Button text="{i18n>editButton}" press=".onOpenEditRecordProductDialogV2"/>
                 </cells>
             </ColumnListItem>
         </items>

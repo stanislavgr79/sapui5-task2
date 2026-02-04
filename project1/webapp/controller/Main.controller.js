@@ -112,7 +112,7 @@ sap.ui.define([
             this.oAddRecordDialog.open();
 		},
 
-        addProductRecord: function() {
+        addProductRecordV2: function() {
             // get the binding context of the new entity from the dialog form
             const oContext = this.oAddRecordProductDialogV2.getBindingContext("v2");
             // get the new product data from the binding context
@@ -169,6 +169,56 @@ sap.ui.define([
             this.oAddRecordProductDialogV2.open();
 		},
 
+        editProductRecordV2: function() {
+            // get the binding context of the edited entity from the dialog form
+            const oContext = this.oEditRecordProductDialogV2.getBindingContext("v2");
+            // get the product data from the binding context
+            const editProduct = oContext.getObject();
+            // validate the edited product data
+            if (!this._validateSubmitNewProduct(editProduct)) {
+                return;
+            }
+            // get copy original to avoid modifying it with unsaved changes
+            const oData = Object.assign({}, editProduct);
+            // remove metadata to avoid issues with update request
+            if (Object.prototype.hasOwnProperty.call(oData, "__metadata")) {
+                delete oData.__metadata;
+            }
+            // submit the changes to the OData service
+            const oModel = this.getModel("v2");
+            oModel.update(
+                oContext.getPath(),
+                oData,
+                {
+                success: function() {
+                    MessageToast.show(this._oBundle.getText("updateSuccessMessage"));
+                }.bind(this),
+                error: function() {
+                    MessageBox.error(this._oBundle.getText("updateErrorMessage"));
+                }.bind(this)
+            });
+
+            if (this.oEditRecordProductDialogV2) {
+                this.oEditRecordProductDialogV2.close();
+            }
+        },
+
+        async onOpenEditRecordProductDialogV2(oEvent) {
+            if (!this.oEditRecordProductDialogV2) {
+                const oEditRecordProductDialogV2 = await this.loadFragment({
+                    name: "project1.view.pages.main.fragments.EditRecordsV2"
+                });
+                this.oEditRecordProductDialogV2 = oEditRecordProductDialogV2;
+
+                this.getView().addDependent(this.oEditRecordProductDialogV2);
+            }
+            // get context of the selected item to edit from the table
+            const oContext = oEvent.getSource().getBindingContext("v2");
+            // set the binding context of the dialog to the selected entry
+            this.oEditRecordProductDialogV2.setBindingContext(oContext, "v2");
+            this.oEditRecordProductDialogV2.open();
+        },
+
         onCloseAddRecordProductDialogV2: function() {
             // reset validation state in the model JSON modelV2
             this._resetValidateProductState();
@@ -178,6 +228,19 @@ sap.ui.define([
             oContext.delete();
             if (this.oAddRecordProductDialogV2) {
                 this.oAddRecordProductDialogV2.close();
+            }
+        },
+
+        onCloseEditRecordProductDialogV2: function() {
+            // reset validation state in the model JSON modelV2
+            this._resetValidateProductState();
+            // reset pending changes for the edited entity
+            const oContext = this.oEditRecordProductDialogV2?.getBindingContext("v2");
+            // discard changes made in the dialog
+            this.getModel("v2").resetChanges([oContext.getPath()], true);
+
+            if (this.oEditRecordProductDialogV2) {
+                this.oEditRecordProductDialogV2.close();
             }
         },
 
