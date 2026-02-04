@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/core/UIComponent",
     "sap/ui/model/json/JSONModel",
+    "sap/ui/model/BindingMode",
     "project1/model/models"
-], (UIComponent, JSONModel, models) => {
+], (UIComponent, JSONModel, BindingMode, models) => {
     "use strict";
 
     return UIComponent.extend("project1.Component", {
@@ -23,7 +24,11 @@ sap.ui.define([
             // set the device model
             this.setModel(models.createDeviceModel(), "device");
 
-            this.setModel(new JSONModel({ selectedItems: 0 }), "v2view");
+            this.setModel(models.productModelV2(), "modelV2");
+
+            const oV2Model = this.getModel("v2");
+            oV2Model.setDefaultBindingMode(BindingMode.TwoWay);
+
 
             // enable routing
             this.getRouter().initialize();

@@ -12,14 +12,20 @@
                     <Text 
                         text="{i18n>fieldId}" width="10rem"/>
                     <Input
-                        id="addBookId"
+                        id="addProductId"
                         required="true"
                         type="Number"
+                        core:require="{
+                                    ValidateProductV2: 'project1/validate/validateProductV2'
+                        }"
                         value="{
-                            path: 'books>/newBooks/ID',
+                            path: 'v2>ID',
                             type: 'sap.ui.model.type.Integer',
                             constraints: { minimum: 0 }
                         }"
+                        change="ValidateProductV2.onValidateId"
+                        valueState="{= ${modelV2>/validate/isValidId} === true ? 'None' : 'Error'}"
+                        valueStateText="{i18n>valueStateRequired}"
                         width="100%">
                         <layoutData>
                             <FlexItemData growFactor="1" />
@@ -29,17 +35,17 @@
                 <HBox>
                     <Text text="{i18n>fieldName}" width="10rem"/>
                     <Input
-                        id="addBookName"
+                        id="addProductName"
                         required="true"
                         core:require="{
-                                    ValidateBook: 'project1/validate/validateBook'
+                                    ValidateProductV2: 'project1/validate/validateProductV2'
                         }"
                         value="{
-                            path: 'books>/newBooks/Name',
+                            path: 'v2>Name',
                             type: 'sap.ui.model.type.String'
                         }"
-                        change="ValidateBook.onValidateName"
-                        valueState="{= ${books>/validate/isValidName} === true ? 'None' : 'Error'}"
+                        change="ValidateProductV2.onValidateName"
+                        valueState="{= ${modelV2>/validate/isValidName} === true ? 'None' : 'Error'}"
                         valueStateText="{i18n>valueStateRequired}"
                         width="100%">
                         <layoutData>
@@ -48,40 +54,19 @@
                     </Input>
                 </HBox>
                 <HBox>
-                    <Text text="{i18n>fieldAuthor}" width="10rem"/>
+                    <Text text="{i18n>fieldDescription}" width="10rem"/>
                     <Input
-                        id="addBookAuthor"
+                        id="addProductDescription"
                         required="true"
                         core:require="{
-                                    ValidateBook: 'project1/validate/validateBook'
+                                    ValidateProductV2: 'project1/validate/validateProductV2'
                         }"
                         value="{
-                            path: 'books>/newBooks/Author',
+                            path: 'v2>Description',
                             type: 'sap.ui.model.type.String'
                         }"
-                        change="ValidateBook.onValidateAuthor"
-                        valueState="{= ${books>/validate/isValidAuthor} === true ? 'None' : 'Error'}"
-                        valueStateText="{i18n>valueStateRequired}"
-                        width="100%">
-                        <layoutData>
-                            <FlexItemData growFactor="1" />
-                        </layoutData>
-                    </Input>
-                </HBox>
-                <HBox>
-                    <Text text="{i18n>fieldGenre}" width="10rem"/>
-                    <Input
-                        id="addBookGenre"
-                        required="true"
-                        core:require="{
-                                    ValidateBook: 'project1/validate/validateBook'
-                        }"
-                        value="{
-                            path: 'books>/newBooks/Genre',
-                            type: 'sap.ui.model.type.String'
-                        }"
-                        change="ValidateBook.onValidateGenre"
-                        valueState="{= ${books>/validate/isValidGenre} === true ? 'None' : 'Error'}"
+                        change="ValidateProductV2.onValidateDescription"
+                        valueState="{= ${modelV2>/validate/isValidDescription} === true ? 'None' : 'Error'}"
                         valueStateText="{i18n>valueStateRequired}"
                         width="100%">
                         <layoutData>
@@ -92,34 +77,54 @@
                 <HBox>
                     <Text text="{i18n>fieldReleaseDate}" width="10rem"/>
                     <DatePicker
-                        id="addBookReleaseDate"
                         required="true"
                         core:require="{
-                                    ValidateBook: 'project1/validate/validateBook'
+                                    ValidateProductV2: 'project1/validate/validateProductV2'
                         }"
                         value="{
-                            path: 'books>/newBooks/ReleaseDate',
+                            path: 'v2>ReleaseDate',
                             type: 'sap.ui.model.type.Date',
                             formatOptions: { pattern: 'yyyy-MM-dd' }
                         }"
-                        change="ValidateBook.onValidateReleaseDate"
+                        change="ValidateProductV2.onValidateReleaseDate"
                         valueFormat="yyyy-MM-dd"
                         displayFormat="yyyy-MM-dd"
-                        valueState="{= ${books>/validate/isValidReleaseDate} === true ? 'None' : 'Error'}"
+                        valueState="{= ${modelV2>/validate/isValidReleaseDate} === true ? 'None' : 'Error'}"
                         valueStateText="{i18n>valueStateRequired}"
                         width="100%" />
                 </HBox>
                 <HBox>
-                    <Text text="{i18n>fieldAvailable}" width="10rem"/>
+                    <Text text="{i18n>fieldPrice}" width="10rem"/>
                     <Input
-                        id="addBookAvailable"
                         type="Number"
+                        core:require="{
+                                    ValidateProductV2: 'project1/validate/validateProductV2'
+                        }"
                         value="{
-                            path:'books>/newBooks/AvailableQuantity', 
+                            path:'v2>Price', 
                             type:'sap.ui.model.type.Integer',
                             constraints: { minimum: 0 }
                          }"
-                        required="true"
+                        change="ValidateProductV2.onValidatePrice"
+                        valueState="{= ${modelV2>/validate/isValidPrice} === true ? 'None' : 'Error'}"
+                        valueStateText="{i18n>valueStateRequired}"
+                        width="100%"/>
+                </HBox>
+                <HBox>
+                    <Text text="{i18n>fieldRating}" width="10rem"/>
+                    <Input
+                        type="Number"
+                        core:require="{
+                                    ValidateProductV2: 'project1/validate/validateProductV2'
+                        }"
+                        value="{
+                            path:'v2>Rating', 
+                            type:'sap.ui.model.type.Integer',
+                            constraints: { minimum: 0 }
+                         }"
+                        change="ValidateProductV2.onValidateRating"
+                        valueState="{= ${modelV2>/validate/isValidRating} === true ? 'None' : 'Error'}"
+                        valueStateText="{i18n>valueStateRequired}"
                         width="100%"/>
                 </HBox>
             </l:VerticalLayout>
@@ -128,11 +133,11 @@
             <Button
             text="{i18n>addButton}"
             type="Emphasized"
-            enabled="{books>/validate/isFormValid}"
-            press="addRecord"/>
+            enabled="{modelV2>/validate/isFormValid}"
+            press="addProductRecord"/>
         </beginButton>
         <endButton>
-            <Button text="{i18n>cancelButton}" type="Transparent" press="onCloseAddRecordDialog"/>
+            <Button text="{i18n>cancelButton}" type="Transparent" press="onCloseAddRecordProductDialogV2"/>
         </endButton>
     </Dialog>
 </core:FragmentDefinition>
