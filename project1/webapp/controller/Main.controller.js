@@ -7,8 +7,12 @@ sap.ui.define([
     "../validate/validateBook",
     "../validate/validateProductV2",
     "sap/m/MessageBox",
-	"sap/m/MessageToast"
-], (BaseController, Dialog, Button, Text, mobileLibrary, validateBook, validateProductV2, MessageBox, MessageToast) => {
+	"sap/m/MessageToast",
+    "sap/ui/model/Sorter",
+    "sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator"
+], (BaseController, Dialog, Button, Text, mobileLibrary, validateBook, validateProductV2,
+     MessageBox, MessageToast, Sorter, Filter, FilterOperator) => {
     "use strict";
 
     // shortcut for sap.m.ButtonType
@@ -297,6 +301,38 @@ sap.ui.define([
             this.oDeleteDialog.open();
         },
 
+        onFilterProductsByNameV2: function(oEvent) {  
+            const aFilters = [];
+            const sQuery = oEvent.getSource().getValue();
+            if (sQuery) {
+                aFilters.push(new Filter("Name", FilterOperator.Contains, sQuery));
+            }
+
+            const oList = this.byId("productsTableV2");
+            const oBinding = oList.getBinding("items");
+            oBinding.filter(aFilters);
+        },
+
+        onSortingByColumnV2: function(oEvent) {
+            const sSelectedKey = oEvent.getParameter("selectedItem").getKey();
+            const oList = this.byId("productsTableV2");
+            const oBinding = oList.getBinding("items");
+            let aSorters = [];
+
+            if (sSelectedKey && sSelectedKey !== "none") {
+                // first path, second descending true/false
+                const oSorter = new Sorter(sSelectedKey, true);
+                aSorters.push(oSorter);
+            }
+
+            oBinding.sort(aSorters);
+            const oSource = oEvent.getSource();
+            const oFocusDomRef = oSource && oSource.getFocusDomRef ? oSource.getFocusDomRef() : null;
+            if (oFocusDomRef && oFocusDomRef.blur) {
+                oFocusDomRef.blur();
+            }
+        },
+
         onFilter: function() {
             const input = this.byId("bookTitleInput").getValue().trim();
             const genre = this.byId("genreSelect").getSelectedKey();
@@ -306,11 +342,11 @@ sap.ui.define([
             const filters = [];
 
             if (input) {
-                filters.push(new sap.ui.model.Filter("Name", sap.ui.model.FilterOperator.Contains, input));
+                filters.push(new Filter("Name", FilterOperator.Contains, input));
             }
 
             if (genre && genre !== "All") {
-                filters.push(new sap.ui.model.Filter("Genre", sap.ui.model.FilterOperator.EQ, genre));
+                filters.push(new Filter("Genre", FilterOperator.EQ, genre));
             }
 
             items.filter(filters);
