@@ -2,6 +2,7 @@
     controllerName="project1.controller.Main"
     displayBlock="true"
     xmlns="sap.m"
+    xmlns:core="sap.ui.core"
     xmlns:mvc="sap.ui.core.mvc">
     <Table
         id="productsTableV2"
@@ -14,6 +15,24 @@
             <OverflowToolbar>
                 <Title text="Products (V2)" level="H2" />
                 <ToolbarSpacer />
+                <Input
+			        placeholder="{i18n>filterByNamePlaceholder}"
+                    liveChange="onFilterProductsByNameV2"
+                    width="40%"/>
+                <ComboBox
+                    id="comboBoxSortingV2"
+                    width="200px"
+                    placeholder="{i18n>sortingByColumnPlaceholder}"
+                    selectionChange=".onSortingByColumnV2"
+                    selectedKey="">
+                    <core:Item key="none" text="{i18n>none}" />
+                    <core:Item key="Name" text="{i18n>columnName}" />
+                    <core:Item key="Description" text="{i18n>columnDescription}" />
+                    <core:Item key="ReleaseDate" text="{i18n>columnReleaseDate}" />
+                    <core:Item key="Price" text="{i18n>columnPrice}" />
+                    <core:Item key="Rating" text="{i18n>columnRating}" />
+                </ComboBox>
+                <ToolbarSpacer />
                 <Button text="{i18n>addRecordButton}" press=".onOpenAddRecordProductDialogV2" type="Accept" />
                 <Button 
                     text="{i18n>deleteRecordsButton}" press=".onDeleteV2Press" type="Reject"
@@ -22,22 +41,22 @@
         </headerToolbar>
         <columns>
             <Column width="4em">
-                <Text text="ID" />
+                <Text text="{i18n>columnId}" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="Name" />
+                <Text text="{i18n>columnName}" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="Description" />
+                <Text text="{i18n>columnDescription}" />
             </Column>
             <Column width="15rem" minScreenWidth="Desktop" demandPopin="true">
-                <Text text="ReleaseDate" />
+                <Text text="{i18n>columnReleaseDate}" />
             </Column>
             <Column hAlign="End">
-                <Text text="Price" />
+                <Text text="{i18n>columnPrice}" />
             </Column>
             <Column hAlign="Center">
-                <Text text="Rating" />
+                <Text text="{i18n>columnRating}" />
             </Column>
             <Column hAlign="Center">
                 <Text text="{i18n>columnActions}"/>
