@@ -1,0 +1,16 @@
+<mvc:View controllerName="project1.controller.Product"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m">
+	<Page
+		id="productPage"
+		title="Product"
+		showNavButton="true"
+		navButtonPress="onNavBack">
+		<content>
+			<VBox class="sapUiSmallMargin">
+				<Title text="Product" level="H2" />
+				<Text text="Selected Product ID: {v2>ID}" />
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>
