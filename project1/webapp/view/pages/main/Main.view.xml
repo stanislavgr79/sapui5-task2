@@ -7,6 +7,7 @@
             <IconTabBar
                 id="idIconTabBar"
                 expanded="{device>/isNoPhone}"
+                select="onTabSelect"
                 class="sapUiResponsiveContentPadding">
                 <items>
                     <IconTabFilter text="JSON Model" key="json">

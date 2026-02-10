@@ -27,6 +27,9 @@ sap.ui.define([
             this._oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
             //Main.controller.js:23 v2 model batch usage: true
             console.log("v2 model batch usage: " + this.getModel("v2").bUseBatch);
+
+            const oRouter = this.getOwnerComponent().getRouter();
+            oRouter.getRoute("RouteTab").attachPatternMatched(this._onTabRouteMatched, this);
         },
 
         onBeforeRendering() {
@@ -46,6 +49,27 @@ sap.ui.define([
         onSelectionChange: function() {
             const selectedItems = this.byId("booksTable").getSelectedItems().length;
             this.getModel("books").setProperty("/selectedItems", selectedItems);
+        },
+
+        onTabSelect: function(oEvent) {
+            const sKey = oEvent.getParameter("key");
+            this.getOwnerComponent().getRouter().navTo("RouteTab", { tabKey: sKey }, false);
+        },
+
+        //Step 30: Routing and Navigation
+        onProductPress: function(oEvent) {
+            const oItem = oEvent.getSource();
+            const oContext = oItem.getBindingContext("v2");
+            const sProductId = oContext.getProperty("ID");
+            this.getOwnerComponent().getRouter().navTo("RouteProduct", { productId: sProductId });
+        },
+
+        _onTabRouteMatched: function(oEvent) {
+            const sKey = oEvent.getParameter("arguments")?.tabKey;
+            const oTabBar = this.byId("idIconTabBar");
+            if (oTabBar && oTabBar.getSelectedKey() !== sKey) {
+                oTabBar.setSelectedKey(sKey);
+            }
         },
 
         //v2 OData Table

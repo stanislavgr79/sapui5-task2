@@ -63,7 +63,9 @@
             </Column>
         </columns>
         <items>
-            <ColumnListItem vAlign="Middle">
+            <ColumnListItem vAlign="Middle" 
+                type="Navigation" 
+                press=".onProductPress">
                 <cells>
                     <Text text="{v2>ID}" />
                     <Text text="{v2>Name}" />

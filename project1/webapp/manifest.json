@@ -101,6 +101,20 @@
       },
       "routes": [
         {
+          "name": "RouteProduct",
+          "pattern": "Product/{productId}",
+          "target": [
+            "TargetProduct"
+          ]
+        },
+        {
+          "name": "RouteTab",
+          "pattern": "tab/{tabKey}",
+          "target": [
+            "TargetMain"
+          ]
+        },
+        {
           "name": "RouteMain",
           "pattern": ":?query:",
           "target": [
@@ -112,6 +126,10 @@
         "TargetMain": {
           "id": "Main",
           "name": "pages.main.Main"
+        },
+        "TargetProduct": {
+          "id": "Product",
+          "name": "pages.product.Product"
         }
       }
     },
