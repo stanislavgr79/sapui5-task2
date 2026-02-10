@@ -28,6 +28,9 @@ sap.ui.define([
 			const sPath = oModel.createKey("/Products", { ID: sProductId });
 			this.getView().bindElement({
 				path: sPath,
+				parameters: {
+					expand: "Supplier"
+				},
 				model: "v2"
 			});
 		}

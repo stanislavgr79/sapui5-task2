@@ -1,16 +1,110 @@
 <mvc:View controllerName="project1.controller.Product"
-	xmlns:mvc="sap.ui.core.mvc"
-	xmlns="sap.m">
-	<Page
-		id="productPage"
-		title="Product"
-		showNavButton="true"
-		navButtonPress="onNavBack">
-		<content>
-			<VBox class="sapUiSmallMargin">
-				<Title text="Product" level="H2" />
-				<Text text="Selected Product ID: {v2>ID}" />
-			</VBox>
-		</content>
-	</Page>
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.uxap"
+    xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+    xmlns:m="sap.m">
+    <m:Page
+        id="productPage"
+        title="Product"
+        showNavButton="true"
+        navButtonPress="onNavBack">
+        <m:content>
+            <ObjectPageLayout id="ObjectPageLayout" upperCaseAnchorBar="false">
+                <headerTitle>
+                    <ObjectPageHeader objectTitle="{v2>Name}">
+                    </ObjectPageHeader>
+                </headerTitle>
+
+                <sections>
+                    <ObjectPageSection titleUppercase="false" title="Product">
+                        <subSections>
+                            <ObjectPageSubSection titleUppercase="false">
+                                <blocks>
+                                    <m:VBox class="sapUiSmallMargin">
+                                        <f:SimpleForm id="SimpleFormDisplay354"
+                                            editable="false"
+                                            title="Product Information"
+                                            layout="ResponsiveGridLayout"
+                                            labelSpanXL="3"
+                                            labelSpanL="3"
+                                            labelSpanM="3"
+                                            labelSpanS="12"
+                                            adjustLabelSpan="false"
+                                            emptySpanXL="4"
+                                            emptySpanL="4"
+                                            emptySpanM="4"
+                                            emptySpanS="0"
+                                            columnsXL="1"
+                                            columnsL="1"
+                                            columnsM="1"
+                                            singleContainerFullSize="false" >
+                                            <f:content>
+                                                <m:Label text="ID" />
+                                                <m:Text text="{v2>ID}" />
+                                                <m:Label text="Description" />
+                                                <m:Text text="{v2>Description}" />
+                                                <m:Label text="ReleaseDate" />
+                                                <m:Text width="40rem" text="{v2>ReleaseDate}" />
+                                                <m:Label text="Price" />
+                                                <m:Text text="{v2>Price}" />
+                                                <m:Label text="Rating" />
+                                                <m:Text text="{v2>Rating}" />
+                                            </f:content>
+                                        </f:SimpleForm>
+                                    </m:VBox>
+                                </blocks>
+                            </ObjectPageSubSection>
+                        </subSections>
+                    </ObjectPageSection>
+
+                    <ObjectPageSection titleUppercase="false" title="Supplier">
+                        <subSections>
+                            <ObjectPageSubSection titleUppercase="false">
+                                <blocks>
+                                    <m:VBox class="sapUiSmallMargin">
+                                        <f:SimpleForm id="SimpleFormDisplay355"
+                                            editable="false"
+                                            title="Supplier Information"
+                                            layout="ResponsiveGridLayout"
+                                            labelSpanXL="3"
+                                            labelSpanL="3"
+                                            labelSpanM="3"
+                                            labelSpanS="12"
+                                            adjustLabelSpan="false"
+                                            emptySpanXL="4"
+                                            emptySpanL="4"
+                                            emptySpanM="4"
+                                            emptySpanS="0"
+                                            columnsXL="1"
+                                            columnsL="1"
+                                            columnsM="1"
+                                            singleContainerFullSize="false" >
+                                            <f:content>
+                                                <m:Label text="Name" />
+                                                <m:Text text="{v2>Supplier/Name}" />
+                                                <m:Label text="Address" />
+                                                <m:Label text="Street" />
+                                                <m:Text text="{v2>Supplier/Address/Street}" />
+                                                <m:Label text="City" />
+                                                <m:Text text="{v2>Supplier/Address/City}" />
+                                                <m:Label text="State" />
+                                                <m:Text text="{v2>Supplier/Address/State}" />
+                                                <m:Label text="ZipCode" />
+                                                <m:Text text="{v2>Supplier/Address/ZipCode}" />
+                                                <m:Label text="Country" />
+                                                <m:Text text="{v2>Supplier/Address/Country}" />
+                                                <m:Label text="Concurrency" />
+                                                <m:Text text="{v2>Supplier/Concurrency}" />
+                                            </f:content>
+                                        </f:SimpleForm>
+                                    </m:VBox>
+                                </blocks>
+                            </ObjectPageSubSection>
+                        </subSections>
+                    </ObjectPageSection>
+                </sections>
+            </ObjectPageLayout>
+        </m:content>
+    </m:Page>
 </mvc:View>
