@@ -32,6 +32,13 @@ function (JSONModel, Device) {
             return oModel;
         },
 
+        productModelV4: function () {
+            var oModel = new JSONModel({
+                selectedItems: 0
+            });
+            return oModel;
+        },
+
         /**
          * Creates and returns a JSON model with book data
          * @returns {sap.ui.model.json.JSONModel} The books model with dummy data

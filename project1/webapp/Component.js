@@ -26,6 +26,8 @@ sap.ui.define([
 
             this.setModel(models.productModelV2(), "modelV2");
 
+            this.setModel(models.productModelV4(), "modelV4");
+
             const oV2Model = this.getModel("v2");
             oV2Model.setDefaultBindingMode(BindingMode.TwoWay);
 
