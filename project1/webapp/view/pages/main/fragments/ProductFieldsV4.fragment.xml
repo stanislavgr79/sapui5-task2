@@ -1,0 +1,125 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns="sap.m">
+        <l:VerticalLayout class="sapUiContentPadding" width="100%">
+                <HBox>
+                    <Text 
+                        text="{i18n>fieldId}" width="10rem"/>
+                    <Input
+                        required="true"
+                        type="Number"
+                        core:require="{
+                                    ValidateProductV4: 'project1/validate/validateProductV4'
+                        }"
+                        value="{
+                            path: 'v4>ID',
+                            type: 'sap.ui.model.type.Integer',
+                            constraints: { minimum: 0 }
+                        }"
+                        change="ValidateProductV4.onValidateId"
+                        valueState="{= ${modelV4>/validate/isValidId} === true ? 'None' : 'Error'}"
+                        valueStateText="{i18n>valueStateRequired}"
+                        width="100%">
+                        <layoutData>
+                            <FlexItemData growFactor="1" />
+                        </layoutData>
+                    </Input>
+                </HBox>
+                <HBox>
+                    <Text text="{i18n>fieldName}" width="10rem"/>
+                    <Input
+                        required="true"
+                        core:require="{
+                                    ValidateProductV4: 'project1/validate/validateProductV4'
+                        }"
+                        value="{
+                            path: 'v4>Name',
+                            type: 'sap.ui.model.type.String'
+                        }"
+                        change="ValidateProductV4.onValidateName"
+                        valueState="{= ${modelV4>/validate/isValidName} === true ? 'None' : 'Error'}"
+                        valueStateText="{i18n>valueStateRequired}"
+                        width="100%">
+                        <layoutData>
+                            <FlexItemData growFactor="1" />
+                        </layoutData>
+                    </Input>
+                </HBox>
+                <HBox>
+                    <Text text="{i18n>fieldDescription}" width="10rem"/>
+                    <Input
+                        required="true"
+                        core:require="{
+                                    ValidateProductV4: 'project1/validate/validateProductV4'
+                        }"
+                        value="{
+                            path: 'v4>Description',
+                            type: 'sap.ui.model.type.String'
+                        }"
+                        change="ValidateProductV4.onValidateDescription"
+                        valueState="{= ${modelV4>/validate/isValidDescription} === true ? 'None' : 'Error'}"
+                        valueStateText="{i18n>valueStateRequired}"
+                        width="100%">
+                        <layoutData>
+                            <FlexItemData growFactor="1" />
+                        </layoutData>
+                    </Input>
+                </HBox>
+                <HBox>
+                    <Text text="{i18n>fieldReleaseDate}" width="10rem"/>
+                    <DatePicker
+                        required="true"
+                        core:require="{
+                                    ValidateProductV4: 'project1/validate/validateProductV4'
+                        }"
+                        value="{
+                            path: 'v4>ReleaseDate',
+                            type: 'sap.ui.model.odata.type.DateTimeOffset',
+                            formatOptions: {
+                                pattern: 'yyyy-MM-dd'
+                            }
+                        }"
+                        change="ValidateProductV4.onValidateReleaseDate"
+                        valueFormat="yyyy-MM-dd"
+                        displayFormat="yyyy-MM-dd"
+                        valueState="{= ${modelV4>/validate/isValidReleaseDate} === true ? 'None' : 'Error'}"
+                        valueStateText="{i18n>valueStateRequired}"
+                        width="100%" />
+                </HBox>
+                <HBox>
+                    <Text text="{i18n>fieldPrice}" width="10rem"/>
+                    <Input
+                        type="Number"
+                        core:require="{
+                                    ValidateProductV4: 'project1/validate/validateProductV4'
+                        }"
+                        value="{
+                            path:'v4>Price', 
+                            type:'sap.ui.model.type.Integer',
+                            constraints: { minimum: 0 }
+                         }"
+                        change="ValidateProductV4.onValidatePrice"
+                        valueState="{= ${modelV4>/validate/isValidPrice} === true ? 'None' : 'Error'}"
+                        valueStateText="{i18n>valueStateRequired}"
+                        width="100%"/>
+                </HBox>
+                <HBox>
+                    <Text text="{i18n>fieldRating}" width="10rem"/>
+                    <Input
+                        type="Number"
+                        core:require="{
+                                    ValidateProductV4: 'project1/validate/validateProductV4'
+                        }"
+                        value="{
+                            path:'v4>Rating', 
+                            type:'sap.ui.model.type.Integer',
+                            constraints: { minimum: 0 }
+                         }"
+                        change="ValidateProductV4.onValidateRating"
+                        valueState="{= ${modelV4>/validate/isValidRating} === true ? 'None' : 'Error'}"
+                        valueStateText="{i18n>valueStateRequired}"
+                        width="100%"/>
+                </HBox>
+        </l:VerticalLayout>
+</core:FragmentDefinition>
