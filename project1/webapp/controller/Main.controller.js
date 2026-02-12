@@ -104,9 +104,35 @@ sap.ui.define([
             this.byId("productsTableV2").removeSelections(); 
         },
 
+        onDeleteV4Press: function () {
+            const oBundle = this._oBundle;
+            const oModel = this.getModel("v4");
+            const oTable = this.getView().byId("productsTableV4");
+            const aSelectedItems = oTable.getSelectedItems();
+            aSelectedItems.forEach(item => {
+                const oContext = item.getBindingContext("v4");
+                oModel.bindContext(oContext.getPath(), /*oContext*/ undefined, {$$updateGroupId : "$auto.deleteGroup"});
+                oContext.delete();
+            });
+            oModel.submitBatch("$auto.deleteGroup")
+               .then(() => {
+                    MessageToast.show(oBundle.getText("deleteSuccessMessage"));
+                    this.getModel("modelV4").setProperty("/selectedItems", 0);
+                    this.byId("productsTableV4").removeSelections();
+                })
+                .catch(() => {
+                    MessageBox.error(oBundle.getText("deleteErrorMessage"));
+                });
+        },
+
         onSelectionChangeV2: function() {
             const selectedItemsV2 = this.byId("productsTableV2").getSelectedItems().length;
             this.getModel("modelV2").setProperty("/selectedItems", selectedItemsV2);
+        },
+
+        onSelectionChangeV4: function() {
+            const selectedItemsV4 = this.byId("productsTableV4").getSelectedItems().length;
+            this.getModel("modelV4").setProperty("/selectedItems", selectedItemsV4);
         },
 
         addRecord: function() {
