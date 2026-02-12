@@ -34,7 +34,16 @@ function (JSONModel, Device) {
 
         productModelV4: function () {
             var oModel = new JSONModel({
-                selectedItems: 0
+                selectedItems: 0,
+                validate: {
+                    isValidId: true,
+                    isValidName: true,
+                    isValidDescription: true,
+                    isValidReleaseDate: true,
+                    isValidPrice: true,
+                    isValidRating: true,
+                    isFormValid: true
+                }
             });
             return oModel;
         },

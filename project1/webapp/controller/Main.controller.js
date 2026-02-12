@@ -6,13 +6,14 @@ sap.ui.define([
     "sap/m/library",
     "../validate/validateBook",
     "../validate/validateProductV2",
+    "../validate/validateProductV4",
     "sap/m/MessageBox",
 	"sap/m/MessageToast",
     "sap/ui/model/Sorter",
     "sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator"
 ], (BaseController, Dialog, Button, Text, mobileLibrary, validateBook, validateProductV2,
-     MessageBox, MessageToast, Sorter, Filter, FilterOperator) => {
+     validateProductV4, MessageBox, MessageToast, Sorter, Filter, FilterOperator) => {
     "use strict";
 
     // shortcut for sap.m.ButtonType
@@ -194,6 +195,32 @@ sap.ui.define([
             }
         },
 
+        addProductRecordV4: function() {
+            // get the binding context of the new entity from the dialog form
+            const oContext = this.oAddRecordProductDialogV4.getBindingContext("v4");
+            // get the new product data from the binding context
+            const oNewProduct = oContext.getObject();
+            // validate the new product data
+            if (!this._validateSubmitNewProductV4(oNewProduct)) {
+                return;
+            }
+
+            const oModel = this.getModel("v4");
+            oModel.submitBatch("createProduct")
+                .then(function () {
+                        MessageToast.show(this._oBundle.getText("addSuccessMessage"));
+                        const oBinding = this.byId("productsTableV4").getBinding("items");
+                        oBinding.refresh();
+                    }.bind(this))
+                .catch(function () {
+                        MessageBox.error(this._oBundle.getText("addErrorMessage"));
+                    }.bind(this));
+
+            if (this.oAddRecordProductDialogV4) {
+                this.oAddRecordProductDialogV4.close();
+            }
+        },
+
         async onOpenAddRecordProductDialogV2() {
             if (!this.oAddRecordProductDialogV2) {
                 const oAddRecordProductDialogV2 = await this.loadFragment({
@@ -206,7 +233,6 @@ sap.ui.define([
             const modelV2 = this.getModel("v2");
             // create a new entry in the OData model
             let oContext = modelV2.createEntry("/Products", {
-                // not to send a POST request yet
                 inactive: true,
                 // initial properties for the new entity
                 properties: {
@@ -221,6 +247,31 @@ sap.ui.define([
             // set the binding context of the dialog to the new entry
             this.oAddRecordProductDialogV2.setBindingContext(oContext, "v2");
             this.oAddRecordProductDialogV2.open();
+		},
+
+        async onOpenAddRecordProductDialogV4() {
+            if (!this.oAddRecordProductDialogV4) {
+                const oAddRecordProductDialogV4 = await this.loadFragment({
+                    name: "project1.view.pages.main.fragments.AddRecordsV4"
+                });
+                this.oAddRecordProductDialogV4 = oAddRecordProductDialogV4;
+
+                this.getView().addDependent(this.oAddRecordProductDialogV4);
+            }
+            const modelV4 = this.getModel("v4");
+            let oList = modelV4.bindList("/Products", undefined, undefined, undefined, {$$updateGroupId : "createProduct"});
+            let oContext = oList.create({
+                ID: 0,
+                Name: "",
+                Description: "",
+                ReleaseDate: null,
+                Price: 0,
+                Rating: 0
+            });
+          
+            // set the binding context of the dialog to the new entry
+            this.oAddRecordProductDialogV4.setBindingContext(oContext, "v4");
+            this.oAddRecordProductDialogV4.open();
 		},
 
         editProductRecordV2: function() {
@@ -282,6 +333,18 @@ sap.ui.define([
             oContext.delete();
             if (this.oAddRecordProductDialogV2) {
                 this.oAddRecordProductDialogV2.close();
+            }
+        },
+
+        onCloseAddRecordProductDialogV4: function() {
+            // reset validation state in the model JSON modelV4
+            this._resetValidateProductStateV4();
+            // get the binding context of the created entity to be deleted
+            const oContext = this.oAddRecordProductDialogV4?.getBindingContext("v4");
+            // delete the created entity
+            oContext.delete();
+            if (this.oAddRecordProductDialogV4) {
+                this.oAddRecordProductDialogV4.close();
             }
         },
 
@@ -517,6 +580,19 @@ sap.ui.define([
             });
         },
 
+        _resetValidateProductStateV4: function () {
+            const model = this.getModel("modelV4");
+            model.setProperty("/validate", {
+                isValidId: true,
+                isValidName: true,
+                isValidDescription: true,
+                isValidReleaseDate: true,
+                isValidPrice: true,
+                isValidRating: true,
+                isFormValid: true
+            });
+        },
+
         _validateSubmitNewProduct: function (oNewProduct) {
             validateProductV2.callValidateId.call(this, oNewProduct.ID);
             validateProductV2.callValidateName.call(this, oNewProduct.Name);
@@ -525,6 +601,17 @@ sap.ui.define([
             validateProductV2.callValidatePrice.call(this, oNewProduct.Price);
             validateProductV2.callValidateRating.call(this, oNewProduct.Rating);
             return validateProductV2.validateForm.call(this);
+        },
+
+        _validateSubmitNewProductV4: function (oNewProduct) {
+            validateProductV4.callValidateId.call(this, oNewProduct.ID);
+            validateProductV4.callValidateName.call(this, oNewProduct.Name);
+            validateProductV4.callValidateDescription.call(this, oNewProduct.Description);
+            validateProductV4.callValidateReleaseDate.call(this, oNewProduct.ReleaseDate);
+            validateProductV4.callValidatePrice.call(this, oNewProduct.Price);
+            validateProductV4.callValidateRating.call(this, oNewProduct.Rating);
+            return validateProductV4.validateForm.call(this);
+
         }
     });
 });

@@ -14,6 +14,7 @@
             <OverflowToolbar>
                 <Title text="Products (V4)" level="H2" />
                 <ToolbarSpacer />
+                <Button text="{i18n>addRecordButton}" press=".onOpenAddRecordProductDialogV4" type="Accept" />
                 <Button 
                     text="{i18n>deleteRecordsButton}" press=".onDeleteV4Press" type="Reject"
                     enabled="{= ${modelV4>/selectedItems} > 0}" />
