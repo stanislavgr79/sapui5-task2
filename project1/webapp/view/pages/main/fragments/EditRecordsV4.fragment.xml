@@ -1,0 +1,23 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns="sap.m">
+    <Dialog
+        title="{i18n>dialogEditTitle}"
+        contentWidth="40rem"
+        resizable="true">
+        <content>
+            <core:Fragment fragmentName="project1.view.pages.main.fragments.ProductFieldsV4" type="XML" />
+        </content>
+        <beginButton>
+            <Button
+            text="{i18n>saveButton}"
+            type="Emphasized"
+            enabled="{modelV4>/validate/isFormValid}"
+            press="editProductRecordV4"/>
+        </beginButton>
+        <endButton>
+            <Button text="{i18n>cancelButton}" type="Transparent" press="onCloseEditRecordProductDialogV4"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

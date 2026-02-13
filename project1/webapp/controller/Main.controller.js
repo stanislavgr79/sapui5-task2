@@ -308,6 +308,33 @@ sap.ui.define([
             }
         },
 
+        editProductRecordV4: function() {
+            // get the binding context of the edited entity from the dialog form
+            const oContext = this.oEditRecordProductDialogV4.getBindingContext("v4");
+            // get the product data from the binding context
+            const editProduct = oContext.getObject();
+            // validate the edited product data
+            if (!this._validateSubmitNewProduct(editProduct)) {
+                return;
+            }
+
+            // submit the changes to the OData service
+            const oModel = this.getModel("v4");
+            oModel.submitBatch("updateProduct")
+                .then(function () {
+                        MessageToast.show(this._oBundle.getText("updateSuccessMessage"));
+                        const oBinding = this.byId("productsTableV4").getBinding("items");
+                        oBinding.refresh();
+                    }.bind(this))
+                .catch(function () {
+                        MessageBox.error(this._oBundle.getText("updateErrorMessage"));
+                    }.bind(this));
+
+            if (this.oEditRecordProductDialogV4) {
+                this.oEditRecordProductDialogV4.close();
+            }
+        },
+
         async onOpenEditRecordProductDialogV2(oEvent) {
             if (!this.oEditRecordProductDialogV2) {
                 const oEditRecordProductDialogV2 = await this.loadFragment({
@@ -322,6 +349,26 @@ sap.ui.define([
             // set the binding context of the dialog to the selected entry
             this.oEditRecordProductDialogV2.setBindingContext(oContext, "v2");
             this.oEditRecordProductDialogV2.open();
+        },
+
+        async onOpenEditRecordProductDialogV4(oEvent) {
+            if (!this.oEditRecordProductDialogV4) {
+                const oEditRecordProductDialogV4 = await this.loadFragment({
+                    name: "project1.view.pages.main.fragments.EditRecordsV4"
+                });
+                this.oEditRecordProductDialogV4 = oEditRecordProductDialogV4;
+                this.getView().addDependent(this.oEditRecordProductDialogV4);
+            }
+
+            const oContext = oEvent.getSource().getBindingContext("v4");
+
+            this.oEditRecordProductDialogV4.bindElement({
+                path: oContext.getPath(),
+                model: "v4",
+                parameters: { $$updateGroupId: "updateProduct" }
+            });
+
+            this.oEditRecordProductDialogV4.open();
         },
 
         onCloseAddRecordProductDialogV2: function() {
@@ -358,6 +405,15 @@ sap.ui.define([
 
             if (this.oEditRecordProductDialogV2) {
                 this.oEditRecordProductDialogV2.close();
+            }
+        },
+
+        onCloseEditRecordProductDialogV4: function() {
+            this._resetValidateProductStateV4();
+            this.getModel("v4").resetChanges("updateProduct");
+
+            if (this.oEditRecordProductDialogV4) {
+                this.oEditRecordProductDialogV4.close();
             }
         },
 
