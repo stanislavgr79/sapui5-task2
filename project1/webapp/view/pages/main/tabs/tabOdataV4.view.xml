@@ -39,6 +39,9 @@
             <Column hAlign="Center">
                 <Text text="Rating" />
             </Column>
+            <Column hAlign="Center">
+                <Text text="{i18n>columnActions}"/>
+            </Column>
         </columns>
         <items>
             <ColumnListItem vAlign="Middle">
@@ -55,6 +58,7 @@
                      />
                     <ObjectNumber number="{v4>Price}" />
                     <Text text="{v4>Rating}" />
+                    <Button text="{i18n>editButton}" press=".onOpenEditRecordProductDialogV4"/>
                 </cells>
             </ColumnListItem>
         </items>
